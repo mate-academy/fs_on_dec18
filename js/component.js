@@ -10,4 +10,16 @@ export default class Component {
   show() {
     this._element.hidden = false;
   }
+
+  on(eventName, elementName, callback) {
+    this._element.addEventListener(eventName, (event) => {
+      let delegateTarget = event.target.closest(`[data-element="${ elementName }"]`);
+
+      if (!delegateTarget || !this._element.contains(delegateTarget)) {
+        return;
+      }
+
+      callback(event);
+    });
+  }
 }
