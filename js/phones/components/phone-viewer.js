@@ -2,12 +2,13 @@ import Component from '../../component.js';
 
 export default class PhoneViewer extends Component {
 
-  constructor({ element, onBack }) {
+  constructor({ element }) {
     super({ element });
 
-    this._onBack = onBack;
+    this.on('click', 'back-button', () => {
+      this.emit('back');
+    });
 
-    this.on('click', 'back-button', this._onBack);
     this.on('click', 'small-image', (event) => {
       const smallImage = event.target;
       const largeImage = this._element.querySelector('[data-element="large-image"]');
