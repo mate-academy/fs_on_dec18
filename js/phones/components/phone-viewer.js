@@ -7,7 +7,13 @@ export default class PhoneViewer extends Component {
 
     this._onBack = onBack;
 
-    this.on('click', 'back-button', this._onBack)
+    this.on('click', 'back-button', this._onBack);
+    this.on('click', 'small-image', (event) => {
+      const smallImage = event.target;
+      const largeImage = this._element.querySelector('[data-element="large-image"]');
+
+      largeImage.src = smallImage.src;
+    });
   }
 
   show(phoneDetails) {
@@ -22,7 +28,11 @@ export default class PhoneViewer extends Component {
     const phone = this._phoneDetails;
 
     this._element.innerHTML = `
-      <img class="phone" src="${ phone.images[0] }">
+      <img
+        data-element="large-image"
+        class="phone"
+        src="${ phone.images[0] }"
+      >
 
       <button data-element="back-button">
         Back
@@ -32,28 +42,17 @@ export default class PhoneViewer extends Component {
   
   
       <h1>${ phone.name }</h1>
-  
-      <p>Motorola XOOM with Wi-Fi has a super-powerful dual-core processor and Android™ 3.0 (Honeycomb) — the Android platform designed specifically for tablets. With its 10.1-inch HD widescreen display, you’ll enjoy HD video in a thin, light, powerful and upgradeable tablet.</p>
+      <p>${ phone.description }</p>
   
       <ul class="phone-thumbs">
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.1.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.2.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.3.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.4.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.5.jpg">
-        </li>
+        ${ phone.images.map(imageUrl => `
+          <li>
+            <img
+              data-element="small-image"
+              src="${ imageUrl }"
+            >                
+          </li>
+        `).join('') }
       </ul>
     `;
   }
