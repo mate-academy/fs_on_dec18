@@ -22,21 +22,22 @@ export default class PhonesPage {
       phones: PhoneService.getAll(),
     });
 
-    this._catalog.subscribe(
-      'phone-selected',
+    this._catalog.subscribe('phone-selected', (phoneId) => {
+      const phoneDetails = PhoneService.getById(phoneId);
 
-      (phoneId) => {
-        const phoneDetails = PhoneService.getById(phoneId);
-
-        this._catalog.hide();
-        this._viewer.show(phoneDetails);
-      }
-    );
+      this._catalog.hide();
+      this._viewer.show(phoneDetails);
+    });
   }
 
   _initViewer() {
     this._viewer = new PhoneViewer({
       element: document.querySelector('[data-component="phone-viewer"]'),
+      render() {
+        return `
+          
+        `;
+      }
     });
 
     this._viewer.subscribe('back', () => {
@@ -62,7 +63,7 @@ export default class PhonesPage {
       <div class="row">
 
         <!--Sidebar-->
-        <div class="col-md-2" data-element="sidebar">
+        <div class="col-md-2" data-element="sidebar" ref="(element) => { this._thumb = element }">
           <section>
             <div data-component="filter"></div>
           </section>
