@@ -4,6 +4,14 @@ export default class ShoppingCart extends Component {
   constructor({ element }) {
     super({ element });
 
+    this._items = [];
+
+    this._render();
+  }
+
+  addItem(phoneId) {
+    this._items.push(phoneId);
+
     this._render();
   }
 

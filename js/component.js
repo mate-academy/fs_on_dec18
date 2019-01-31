@@ -25,22 +25,14 @@ export default class Component {
   }
 
   subscribe(eventName, callback) {
-    if (!this._callbackMap[eventName]) {
-      this._callbackMap[eventName] = [];
-    }
-
-    this._callbackMap[eventName].push(callback);
+    this._element.addEventListener(eventName, (event) => {
+      callback(event.detail);
+    });
   }
 
   emit(eventName, data) {
-    const eventCallbacks = this._callbackMap[eventName];
+    let customEvent = new CustomEvent(eventName, { detail: data });
 
-    if (!eventCallbacks) {
-      return;
-    }
-
-    eventCallbacks.forEach(callback => {
-      callback(data);
-    });
+    this._element.dispatchEvent(customEvent);
   }
 }

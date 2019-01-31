@@ -33,16 +33,15 @@ export default class PhonesPage {
   _initViewer() {
     this._viewer = new PhoneViewer({
       element: document.querySelector('[data-component="phone-viewer"]'),
-      render() {
-        return `
-          
-        `;
-      }
     });
 
     this._viewer.subscribe('back', () => {
       this._viewer.hide();
       this._catalog.show();
+    });
+
+    this._viewer.subscribe('added', (phoneId) => {
+      this._cart.addItem(phoneId);
     });
   }
 
