@@ -28,16 +28,15 @@ export default class PhonesPage {
       this._catalog.hide();
       this._viewer.show(phoneDetails);
     });
+
+    this._catalog.subscribe('phone-added', (phoneId) => {
+      this._cart.add(phoneId);
+    });
   }
 
   _initViewer() {
     this._viewer = new PhoneViewer({
       element: document.querySelector('[data-component="phone-viewer"]'),
-      render() {
-        return `
-          
-        `;
-      }
     });
 
     this._viewer.subscribe('back', () => {
