@@ -7,6 +7,12 @@ export default class ShoppingCart extends Component {
     this._itemsMap = {};
 
     this._render();
+
+    this.on('click', 'remove', (event) => {
+      let itemElement = event.target.closest('[data-element="item"]');
+
+      this.remove(itemElement.dataset.itemId);
+    });
   }
 
   add(itemId) {
@@ -39,7 +45,10 @@ export default class ShoppingCart extends Component {
       <ul>
         ${ Object.keys(this._itemsMap).map(itemId => `
           
-          <li>${ itemId } (${ this._itemsMap[itemId] })</li>
+          <li data-element="item" data-item-id="${ itemId }">
+            ${ itemId } (${ this._itemsMap[itemId] })
+            <button data-element="remove">-</button>
+          </li>
         
         `).join('') }
       </ul>
