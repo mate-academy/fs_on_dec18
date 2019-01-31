@@ -50,6 +50,23 @@ export default class PhonesPage {
     this._cart = new ShoppingCart({
       element: document.querySelector('[data-component="shopping-cart"]'),
     });
+
+    this._cart.add('qweqweqwe');
+    this._cart.add('qweqweqwe');
+    this._cart.add('qweqweqwe');
+    this._cart.add('qweqweqwe');
+
+
+    setTimeout(() => {
+      this._cart.remove('qweqweqwe');
+    }, 3000);
+
+
+    setTimeout(() => {
+      this._cart.remove('qweqweqwe');
+      this._cart.remove('qweqweqwe');
+      this._cart.remove('qweqweqwe');
+    }, 6000);
   }
 
   _initFilter() {
