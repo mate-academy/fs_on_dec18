@@ -1427,15 +1427,27 @@ const phonesDetails = [
 
 
 const PhoneService = {
-  getAll({ query = '', orderField = '' } = {}) {
-    console.log(query, orderField);
+  getAll({ query = '', sortBy = '' } = {}) {
+    console.log(`Query: ${query}, sortBy ${sortBy} `);
 
-    return phonesFromServer;
+    const filteredPhones = this._filter(phonesFromServer, query);
+    const sortedPhones = this._sortBy(filteredPhones, sortBy);
+
+    return sortedPhones;
   },
 
   getById(phoneId) {
     return phonesDetails.find(phone => phone.id === phoneId);
   },
+
+
+  _filter(phones, query) {
+    return phones.filter(() => true);
+  },
+
+  _sortBy(phones, sortBy) {
+    return phones;
+  }
 };
 
 export default PhoneService;

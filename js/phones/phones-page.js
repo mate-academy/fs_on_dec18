@@ -10,10 +10,10 @@ export default class PhonesPage {
 
     this._render();
 
+    this._initFilter();
     this._initCatalog();
     this._initViewer();
     this._initShoppingCart();
-    this._initFilter();
   }
 
   _initCatalog() {
