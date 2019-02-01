@@ -1427,7 +1427,9 @@ const phonesDetails = [
 
 
 const PhoneService = {
-  getAll({ query = '', orderField } = {}) {
+  getAll({ query = '', orderField = '' } = {}) {
+    console.log(query, orderField);
+
     return phonesFromServer;
   },
 
