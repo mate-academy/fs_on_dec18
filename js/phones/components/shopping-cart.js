@@ -43,7 +43,7 @@ export default class ShoppingCart extends Component {
     let itemIds = Object.keys(this._itemsMap);
 
     this._element.innerHTML = `
-      <h4>Shopping Cart</h4>
+        <h4>Shopping Cart</h4>
       
       ${ itemIds.length > 0 ? `
         <ul>

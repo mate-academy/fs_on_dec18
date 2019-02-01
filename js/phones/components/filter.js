@@ -11,12 +11,12 @@ export default class Filter extends Component {
     this._element.innerHTML = `
       <p>
         Search:
-        <input>
+        <input data-element="query-field">
       </p>
 
       <p>
         Sort by:
-        <select>
+        <select data-element="order-field">
           <option value="name">Alphabetical</option>
           <option value="age">Newest</option>
         </select>

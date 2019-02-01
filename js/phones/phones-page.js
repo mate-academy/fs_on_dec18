@@ -19,8 +19,10 @@ export default class PhonesPage {
   _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: document.querySelector('[data-component="phone-catalog"]'),
-      phones: PhoneService.getAll(),
     });
+
+    let phones = PhoneService.getAll();
+    this._catalog.show(phones);
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
       const phoneDetails = PhoneService.getById(phoneId);
@@ -58,6 +60,18 @@ export default class PhonesPage {
   _initFilter() {
     this._filter = new Filter({
       element: document.querySelector('[data-component="filter"]'),
+    });
+
+    this._filter.subscribe('order-changed', (orderField) => {
+      let phones = PhoneService.getAll({ orderField });
+
+      this._catalog.show(phones);
+    });
+
+    this._filter.subscribe('query-changed', (query) => {
+      let phones = PhoneService.getAll({ query });
+
+      this._catalog.show(phones);
     });
   }
 
