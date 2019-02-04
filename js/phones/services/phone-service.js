@@ -1,8 +1,5 @@
 const PhoneService = {
   getAll({ query = '', sortBy = '' } = {}) {
-    console.log(`Query: ${query}, sortBy ${sortBy} `);
-
-
     let xhr = new XMLHttpRequest();
 
     xhr.open(
@@ -26,8 +23,27 @@ const PhoneService = {
     return sortedPhones;
   },
 
-  getById(phoneId) {
-    return phonesDetails.find(phone => phone.id === phoneId);
+  getById(phoneId, callback) {
+    let xhr = new XMLHttpRequest();
+
+    xhr.open(
+      'GET',
+      `https://mate-academy.github.io/phone-catalogue-static/phones/${ phoneId }.json`,
+      true
+    );
+
+    xhr.send();
+
+    xhr.onload = () => {
+      if (xhr.status !== 200) {
+        console.log(`${ xhr.status } ${ xhr.statusText }`);
+        return {};
+      }
+
+      const phoneDetails = JSON.parse(xhr.responseText);
+
+      callback(phoneDetails);
+    };
   },
 
 

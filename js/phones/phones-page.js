@@ -24,10 +24,13 @@ export default class PhonesPage {
     this._showPhones();
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
-      const phoneDetails = PhoneService.getById(phoneId);
 
-      this._catalog.hide();
-      this._viewer.show(phoneDetails);
+      PhoneService.getById(phoneId, (phoneDetails) => {
+        console.log('phoneDetails ', phoneDetails);
+
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
+      });
     });
 
     this._catalog.subscribe('phone-added', (phoneId) => {
