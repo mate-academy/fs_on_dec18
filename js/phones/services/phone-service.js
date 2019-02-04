@@ -28,7 +28,7 @@ const PhoneService = {
 
     xhr.open(
       'GET',
-      `https://mate-academy.github.io/phone-catalogue-static/phones/${ phoneId }.json`,
+      `./phones/${phoneId}.json`,
       true
     );
 
