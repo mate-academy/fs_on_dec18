@@ -40,18 +40,26 @@ export default class ShoppingCart extends Component {
   }
 
   _render() {
+    let itemIds = Object.keys(this._itemsMap);
+
     this._element.innerHTML = `
-      <p>Shopping Cart</p>
-      <ul>
-        ${ Object.keys(this._itemsMap).map(itemId => `
+        <h4>Shopping Cart</h4>
+      
+      ${ itemIds.length > 0 ? `
+        <ul>
+          ${itemIds.map(itemId => `
+            
+            <li data-element="item" data-item-id="${itemId}">
+              ${itemId} (${this._itemsMap[itemId]})
+              <button data-element="remove">-</button>
+            </li>
           
-          <li data-element="item" data-item-id="${ itemId }">
-            ${ itemId } (${ this._itemsMap[itemId] })
-            <button data-element="remove">-</button>
-          </li>
-        
-        `).join('') }
-      </ul>
+          `).join('') }
+        </ul>
+      ` : `
+        <p>No items yet</p>
+      ` }
+      
     `;
   }
 }
