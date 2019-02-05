@@ -10,10 +10,12 @@ export default class PhonesPage {
 
     this._render();
 
-    this._initFilter();
     this._initCatalog();
     this._initViewer();
     this._initShoppingCart();
+    this._initFilter();
+
+    this._showPhones();
   }
 
   _initCatalog() {
@@ -21,14 +23,45 @@ export default class PhonesPage {
       element: document.querySelector('[data-component="phone-catalog"]'),
     });
 
-    this._showPhones();
-
     this._catalog.subscribe('phone-selected', (phoneId) => {
 
-      PhoneService.getById(phoneId, (phoneDetails) => {
-        this._catalog.hide();
-        this._viewer.show(phoneDetails);
+
+      const goToDetails = () => {
+        if (detailsAreLoaded && mouseWasClicked && timeHasPassed) {
+          this._catalog.hide();
+          this._viewer.show(phoneDetails);
+        }
+      };
+
+      let phoneDetails = null;
+      let detailsAreLoaded = false;
+      let mouseWasClicked = false;
+      let timeHasPassed = false;
+
+      setTimeout(() => {
+        console.log('timeHasPassed');
+        timeHasPassed = true;
+
+        goToDetails();
+      }, 3000);
+
+      document.oncontextmenu = () => {
+        console.log('Mouse was clicked');
+
+        mouseWasClicked = true;
+
+        goToDetails();
+      };
+
+      PhoneService.getById(phoneId, (details) => {
+        console.log('Phones were loaded');
+
+        phoneDetails = details;
+        detailsAreLoaded = true;
+
+        goToDetails();
       });
+
     });
 
     this._catalog.subscribe('phone-added', (phoneId) => {
