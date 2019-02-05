@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
+// const BASE_URL = 'http://localhost:8080';
 
 const PhoneService = {
 
