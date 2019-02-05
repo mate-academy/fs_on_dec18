@@ -1,17 +1,23 @@
-const PhoneService = {
-  getAll({ query = '', sortBy = '' } = {}, callback) {
-    let url = 'https://mate-academy.github.io/phone-catalogue-static/phones/phones.json';
+// const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
+const BASE_URL = 'http://localhost:8080';
 
-    this._sendRequest(url, (phonesFromServer) => {
+const PhoneService = {
+
+  getAll({ query = '', sortBy = '' } = {}, callbackFromPage) {
+    const url = `${ BASE_URL }/phones/phones.json`;
+
+    const callbackForSendRequest = (phonesFromServer) => {
       const filteredPhones = this._filter(phonesFromServer, query);
       const sortedPhones = this._sortBy(filteredPhones, sortBy);
 
-      callback(sortedPhones);
-    });
+      callbackFromPage(sortedPhones);
+    };
+
+    this._sendRequest(url, callbackForSendRequest);
   },
 
   getById(phoneId, callback) {
-    let url = `https://mate-academy.github.io/phone-catalogue-static/phones/${phoneId}.json`;
+    const url = `${ BASE_URL }/phones/${phoneId}.json`;
 
     this._sendRequest(url, callback);
   },
