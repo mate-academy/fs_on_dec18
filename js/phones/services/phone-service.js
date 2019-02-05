@@ -1,36 +1,25 @@
 const PhoneService = {
-  getAll({ query = '', sortBy = '' } = {}) {
-    let xhr = new XMLHttpRequest();
+  getAll({ query = '', sortBy = '' } = {}, callback) {
+    let url = 'https://mate-academy.github.io/phone-catalogue-static/phones/phones.json';
 
-    xhr.open(
-      'GET',
-      'https://mate-academy.github.io/phone-catalogue-static/phones/phones.json',
-      false
-    );
+    this._sendRequest(url, (phonesFromServer) => {
+      const filteredPhones = this._filter(phonesFromServer, query);
+      const sortedPhones = this._sortBy(filteredPhones, sortBy);
 
-    xhr.send();
-
-    if (xhr.status !== 200) {
-      console.log(`${ xhr.status } ${ xhr.statusText }`);
-      return [];
-    }
-
-    const phonesFromServer = JSON.parse(xhr.responseText);
-
-    const filteredPhones = this._filter(phonesFromServer, query);
-    const sortedPhones = this._sortBy(filteredPhones, sortBy);
-
-    return sortedPhones;
+      callback(sortedPhones);
+    });
   },
 
   getById(phoneId, callback) {
+    let url = `https://mate-academy.github.io/phone-catalogue-static/phones/${phoneId}.json`;
+
+    this._sendRequest(url, callback);
+  },
+
+  _sendRequest(url, callback) {
     let xhr = new XMLHttpRequest();
 
-    xhr.open(
-      'GET',
-      `./phones/${phoneId}.json`,
-      true
-    );
+    xhr.open('GET', url, true);
 
     xhr.send();
 
@@ -40,15 +29,17 @@ const PhoneService = {
         return {};
       }
 
-      const phoneDetails = JSON.parse(xhr.responseText);
+      const data = JSON.parse(xhr.responseText);
 
-      callback(phoneDetails);
+      callback(data);
     };
   },
 
 
   _filter(phones, query) {
-    return phones.filter((phone) => phone.name.includes(query));
+    const regexp = new RegExp(query, 'i');
+
+    return phones.filter(phone => regexp.test(phone.name));
   },
 
   _sortBy(phones, sortBy) {
