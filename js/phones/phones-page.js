@@ -32,6 +32,13 @@ export default class PhonesPage {
       });
     });
 
+    this._catalog.subscribe('phone-selected', async (phoneId) => {
+      const phoneDetails = await PhoneService.getById(phoneId);
+
+      this._catalog.hide();
+      this._viewer.show(phoneDetails);
+    });
+
     this._catalog.subscribe('phone-added', (phoneId) => {
       this._cart.add(phoneId);
     });
@@ -72,13 +79,11 @@ export default class PhonesPage {
     });
   }
 
-  _showPhones() {
+  async _showPhones() {
     const currentFiltering = this._filter.getCurrentData();
-    const phonesPromise = PhoneService.getAll(currentFiltering);
+    const phones = await PhoneService.getAll(currentFiltering);
 
-    phonesPromise.then((phones) => {
-      this._catalog.show(phones);
-    });
+    this._catalog.show(phones);
   }
 
   _render() {
