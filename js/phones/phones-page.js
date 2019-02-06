@@ -25,43 +25,12 @@ export default class PhonesPage {
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
 
+      const detailsPromise = PhoneService.getById(phoneId);
 
-      const goToDetails = () => {
-        if (detailsAreLoaded && mouseWasClicked && timeHasPassed) {
-          this._catalog.hide();
-          this._viewer.show(phoneDetails);
-        }
-      };
-
-      let phoneDetails = null;
-      let detailsAreLoaded = false;
-      let mouseWasClicked = false;
-      let timeHasPassed = false;
-
-      setTimeout(() => {
-        console.log('timeHasPassed');
-        timeHasPassed = true;
-
-        goToDetails();
-      }, 3000);
-
-      document.oncontextmenu = () => {
-        console.log('Mouse was clicked');
-
-        mouseWasClicked = true;
-
-        goToDetails();
-      };
-
-      PhoneService.getById(phoneId, (details) => {
-        console.log('Phones were loaded');
-
-        phoneDetails = details;
-        detailsAreLoaded = true;
-
-        goToDetails();
+      detailsPromise.then((phoneDetails) => {
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
       });
-
     });
 
     this._catalog.subscribe('phone-added', (phoneId) => {
