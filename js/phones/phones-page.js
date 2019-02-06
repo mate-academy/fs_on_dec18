@@ -24,7 +24,6 @@ export default class PhonesPage {
     });
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
-
       const detailsPromise = PhoneService.getById(phoneId);
 
       detailsPromise.then((phoneDetails) => {
@@ -106,3 +105,22 @@ export default class PhonesPage {
     `;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

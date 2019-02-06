@@ -4,20 +4,19 @@ const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
 const PhoneService = {
 
   getAll({ query = '', sortBy = '' } = {}) {
-    return new Promise(
-      (resolve, reject) => {
-        const url = `${ BASE_URL }/phones/phones.json`;
-        const callbackForSendRequest = (phonesFromServer) => {
+    return new Promise((resolve, reject) => {
+      const url = `${ BASE_URL }/phones/phones.json`;
+      const requestPromise = this._sendRequest(url);
+
+      requestPromise
+        .then((phonesFromServer) => {
           const filteredPhones = this._filter(phonesFromServer, query);
           const sortedPhones = this._sortBy(filteredPhones, sortBy);
 
           resolve(sortedPhones);
-        };
-
-        let requestPromise = this._sendRequest(url);
-        requestPromise.then(callbackForSendRequest);
-      }
-    );
+        })
+        .catch((error) => reject(error));
+    });
   },
 
   getById(phoneId) {
@@ -30,7 +29,7 @@ const PhoneService = {
     return new Promise((resolve, reject) => {
 
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'qwe' + url, true);
+      xhr.open('GET', url, true);
       xhr.send();
 
       xhr.onload = () => {
