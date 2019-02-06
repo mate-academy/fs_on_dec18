@@ -3,42 +3,46 @@ const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
 
 const PhoneService = {
 
-  getAll({ query = '', sortBy = '' } = {}, callbackFromPage) {
-    const url = `${ BASE_URL }/phones/phones.json`;
+  getAll({ query = '', sortBy = '' } = {}) {
+    return new Promise((resolve, reject) => {
+      const url = `${ BASE_URL }/phones/phones.json`;
+      const requestPromise = this._sendRequest(url);
 
-    const callbackForSendRequest = (phonesFromServer) => {
-      const filteredPhones = this._filter(phonesFromServer, query);
-      const sortedPhones = this._sortBy(filteredPhones, sortBy);
+      requestPromise
+        .then((phonesFromServer) => {
+          const filteredPhones = this._filter(phonesFromServer, query);
+          const sortedPhones = this._sortBy(filteredPhones, sortBy);
 
-      callbackFromPage(sortedPhones);
-    };
-
-    this._sendRequest(url, callbackForSendRequest);
+          resolve(sortedPhones);
+        })
+        .catch((error) => reject(error));
+    });
   },
 
-  getById(phoneId, callback) {
+  getById(phoneId) {
     const url = `${ BASE_URL }/phones/${phoneId}.json`;
 
-    this._sendRequest(url, callback);
+    return this._sendRequest(url);
   },
 
-  _sendRequest(url, callback) {
-    let xhr = new XMLHttpRequest();
+  _sendRequest(url) {
+    return new Promise((resolve, reject) => {
 
-    xhr.open('GET', url, true);
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.send();
 
-    xhr.send();
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
 
-    xhr.onload = () => {
-      if (xhr.status !== 200) {
-        console.log(`${ xhr.status } ${ xhr.statusText }`);
-        return {};
-      }
+          resolve(data);
+        } else {
+          reject(`Error`);
+        }
+      };
 
-      const data = JSON.parse(xhr.responseText);
-
-      callback(data);
-    };
+    });
   },
 
 

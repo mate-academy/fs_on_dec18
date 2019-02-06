@@ -24,44 +24,12 @@ export default class PhonesPage {
     });
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
+      const detailsPromise = PhoneService.getById(phoneId);
 
-
-      const goToDetails = () => {
-        if (detailsAreLoaded && mouseWasClicked && timeHasPassed) {
-          this._catalog.hide();
-          this._viewer.show(phoneDetails);
-        }
-      };
-
-      let phoneDetails = null;
-      let detailsAreLoaded = false;
-      let mouseWasClicked = false;
-      let timeHasPassed = false;
-
-      setTimeout(() => {
-        console.log('timeHasPassed');
-        timeHasPassed = true;
-
-        goToDetails();
-      }, 3000);
-
-      document.oncontextmenu = () => {
-        console.log('Mouse was clicked');
-
-        mouseWasClicked = true;
-
-        goToDetails();
-      };
-
-      PhoneService.getById(phoneId, (details) => {
-        console.log('Phones were loaded');
-
-        phoneDetails = details;
-        detailsAreLoaded = true;
-
-        goToDetails();
+      detailsPromise.then((phoneDetails) => {
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
       });
-
     });
 
     this._catalog.subscribe('phone-added', (phoneId) => {
@@ -105,9 +73,10 @@ export default class PhonesPage {
   }
 
   _showPhones() {
-    let currentFiltering = this._filter.getCurrentData();
+    const currentFiltering = this._filter.getCurrentData();
+    const phonesPromise = PhoneService.getAll(currentFiltering);
 
-    PhoneService.getAll(currentFiltering, (phones) => {
+    phonesPromise.then((phones) => {
       this._catalog.show(phones);
     });
   }
@@ -136,3 +105,22 @@ export default class PhonesPage {
     `;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
