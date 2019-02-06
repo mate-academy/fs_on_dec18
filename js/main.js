@@ -4,9 +4,6 @@ let currentPage = new PhonesPage({
 });
 
 
-
-
-
 //
 // Promises
 //

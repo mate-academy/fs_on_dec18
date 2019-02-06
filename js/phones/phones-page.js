@@ -105,9 +105,10 @@ export default class PhonesPage {
   }
 
   _showPhones() {
-    let currentFiltering = this._filter.getCurrentData();
+    const currentFiltering = this._filter.getCurrentData();
+    const phonesPromise = PhoneService.getAll(currentFiltering);
 
-    PhoneService.getAll(currentFiltering, (phones) => {
+    phonesPromise.then((phones) => {
       this._catalog.show(phones);
     });
   }
