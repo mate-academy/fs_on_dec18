@@ -15,7 +15,7 @@ export default class PhonesPage {
     this._initShoppingCart();
     this._initFilter();
 
-    this._showPhones();
+    this._showPhones()
   }
 
   _initCatalog() {
@@ -33,7 +33,12 @@ export default class PhonesPage {
     });
 
     this._catalog.subscribe('phone-selected', async (phoneId) => {
-      const phoneDetails = await PhoneService.getById(phoneId);
+      const phoneDetails = await PhoneService.getById(phoneId)
+          .catch(() => null);
+
+      if (!phoneDetails) {
+        return;
+      }
 
       this._catalog.hide();
       this._viewer.show(phoneDetails);
@@ -81,9 +86,14 @@ export default class PhonesPage {
 
   async _showPhones() {
     const currentFiltering = this._filter.getCurrentData();
-    const phones = await PhoneService.getAll(currentFiltering);
 
-    this._catalog.show(phones);
+    try {
+      const phones = await PhoneService.getAll(currentFiltering);
+
+      this._catalog.show(phones);
+    } catch (error) {
+      alert('Server is not available')
+    }
   }
 
   _render() {
