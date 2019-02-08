@@ -81,9 +81,14 @@ export default class PhonesPage {
 
   async _showPhones() {
     const currentFiltering = this._filter.getCurrentData();
-    const phones = await PhoneService.getAll(currentFiltering);
 
-    this._catalog.show(phones);
+    try {
+      const phones = await PhoneService.getAll(currentFiltering);
+
+      this._catalog.show(phones);
+    } catch (error) {
+      alert('Server is not available')
+    }
   }
 
   _render() {
