@@ -5,7 +5,8 @@ module.exports = {
     "es6": true
   },
   "rules": {
-    "no-underscore-dangle": [0, { "allowAfterThis": false }],
-    "template-curly-spacing": ["error", "always"]
+    "no-underscore-dangle": [2, { "allowAfterThis": true }],
+    "template-curly-spacing": [0, "always"],
+    "import/extensions": 0,
   }
 };

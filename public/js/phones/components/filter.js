@@ -1,6 +1,6 @@
 /* global _:true */
 
-import Component from '../../component';
+import Component from '../../component.js';
 
 const { debounce } = _;
 

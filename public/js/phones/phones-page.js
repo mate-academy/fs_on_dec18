@@ -1,8 +1,8 @@
-import PhoneCatalog from './components/phone-catalog';
-import PhoneViewer from './components/phone-viewer';
-import Filter from './components/filter';
-import ShoppingCart from './components/shopping-cart';
-import PhoneService from './services/phone-service';
+import PhoneCatalog from './components/phone-catalog.js';
+import PhoneViewer from './components/phone-viewer.js';
+import Filter from './components/filter.js';
+import ShoppingCart from './components/shopping-cart.js';
+import PhoneService from './services/phone-service.js';
 
 export default class PhonesPage {
   constructor({ element }) {

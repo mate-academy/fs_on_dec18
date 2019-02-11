@@ -1,4 +1,4 @@
-import Component from '../../component';
+import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
   constructor({ element }) {
@@ -36,7 +36,7 @@ export default class PhoneCatalog extends Component {
         
           <li
             data-element="phone"
-            data-phone-id="${ phone.id }"
+            data-phone-id="${phone.id}"
             class="thumbnail"
           >
             <a
