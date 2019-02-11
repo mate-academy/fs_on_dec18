@@ -14,7 +14,7 @@ export default class Component {
 
   on(eventName, elementName, callback) {
     this._element.addEventListener(eventName, (event) => {
-      let delegateTarget = event.target.closest(`[data-element="${ elementName }"]`);
+      const delegateTarget = event.target.closest(`[data-element="${elementName}"]`);
 
       if (!delegateTarget || !this._element.contains(delegateTarget)) {
         return;
@@ -39,7 +39,7 @@ export default class Component {
       return;
     }
 
-    eventCallbacks.forEach(callback => {
+    eventCallbacks.forEach((callback) => {
       callback(data);
     });
   }

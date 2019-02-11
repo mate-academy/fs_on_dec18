@@ -1,8 +1,8 @@
-import PhoneCatalog from './components/phone-catalog.js';
-import PhoneViewer from './components/phone-viewer.js';
-import Filter from './components/filter.js';
-import ShoppingCart from './components/shopping-cart.js';
-import PhoneService from './services/phone-service.js';
+import PhoneCatalog from './components/phone-catalog';
+import PhoneViewer from './components/phone-viewer';
+import Filter from './components/filter';
+import ShoppingCart from './components/shopping-cart';
+import PhoneService from './services/phone-service';
 
 export default class PhonesPage {
   constructor({ element }) {
@@ -15,7 +15,7 @@ export default class PhonesPage {
     this._initShoppingCart();
     this._initFilter();
 
-    this._showPhones()
+    this._showPhones();
   }
 
   _initCatalog() {
@@ -34,7 +34,7 @@ export default class PhonesPage {
 
     this._catalog.subscribe('phone-selected', async (phoneId) => {
       const phoneDetails = await PhoneService.getById(phoneId)
-          .catch(() => null);
+        .catch(() => null);
 
       if (!phoneDetails) {
         return;
@@ -76,7 +76,7 @@ export default class PhonesPage {
     });
 
     this._filter.subscribe('order-changed', () => {
-      this._showPhones()
+      this._showPhones();
     });
 
     this._filter.subscribe('query-changed', () => {
@@ -92,7 +92,7 @@ export default class PhonesPage {
 
       this._catalog.show(phones);
     } catch (error) {
-      alert('Server is not available')
+      alert('Server is not available');
     }
   }
 
@@ -120,22 +120,3 @@ export default class PhonesPage {
     `;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-import Component from '../../component.js';
+import Component from '../../component';
 
 export default class PhoneCatalog extends Component {
   constructor({ element }) {
@@ -9,13 +9,13 @@ export default class PhoneCatalog extends Component {
     this._render();
 
     this.on('click', 'details-link', (event) => {
-      let phoneElement = event.target.closest('[data-element="phone"]');
+      const phoneElement = event.target.closest('[data-element="phone"]');
 
       this.emit('phone-selected', phoneElement.dataset.phoneId);
     });
 
     this.on('click', 'add-button', (event) => {
-      let phoneElement = event.target.closest('[data-element="phone"]');
+      const phoneElement = event.target.closest('[data-element="phone"]');
 
       this.emit('phone-added', phoneElement.dataset.phoneId);
     });

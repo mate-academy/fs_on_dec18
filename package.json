@@ -4,6 +4,7 @@
   "description": "1. Install [node.js](https://nodejs.org/en/) 2. Run `npm install node-static` in project folder 3. Run `node server.js`  4. Open `http://localhost:8080` in browser",
   "main": "server.js",
   "scripts": {
+    "lint": "eslint ./public/js/**/*.js",
     "test": "echo \"Hello\"",
     "start": "node server.js"
   },
@@ -19,6 +20,8 @@
   "homepage": "https://github.com/mate-academy/fs_on_dec18#readme",
   "devDependencies": {
     "eslint": "^5.13.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "node-static": "^0.7.11"
   }
 }
