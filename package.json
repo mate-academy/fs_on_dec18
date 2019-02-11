@@ -17,7 +17,8 @@
     "url": "https://github.com/mate-academy/fs_on_dec18/issues"
   },
   "homepage": "https://github.com/mate-academy/fs_on_dec18#readme",
-  "dependencies": {
+  "devDependencies": {
+    "eslint": "^5.13.0",
     "node-static": "^0.7.11"
   }
 }
