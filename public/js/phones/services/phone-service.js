@@ -13,7 +13,7 @@ const PhoneService = {
     //   });
 
 
-    const phonesFromServer = await this._sendRequest(`/phones/phones`);
+    const phonesFromServer = await this._sendRequest('/phones/phones');
 
     const filteredPhones = this._filter(phonesFromServer, query);
     const sortedPhones = this._sortBy(filteredPhones, sortBy);
@@ -22,13 +22,13 @@ const PhoneService = {
   },
 
   getById(phoneId) {
-    return this._sendRequest(`/phones/${phoneId}`);
+    return this._sendRequest(`/phones/${ phoneId }`);
   },
 
   _sendRequest(url) {
-    return fetch(BASE_URL + url + '.json')
+    return fetch(`${ BASE_URL }${ url }.json`)
       .then(response => response.json())
-      .catch(error => {
+      .catch((error) => {
         console.warn(error);
 
         return Promise.reject(error);
@@ -42,9 +42,9 @@ const PhoneService = {
     return phones.filter(phone => regexp.test(phone.name));
   },
 
-  _sortBy(phones, sortBy) {
+  _sortBy(phones) {
     return phones.sort();
-  }
+  },
 };
 
 export default PhoneService;

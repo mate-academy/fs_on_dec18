@@ -4,7 +4,7 @@
   "description": "1. Install [node.js](https://nodejs.org/en/) 2. Run `npm install node-static` in project folder 3. Run `node server.js`  4. Open `http://localhost:8080` in browser",
   "main": "server.js",
   "scripts": {
-    "lint": "eslint ./public/js/**/*.js",
+    "lint": "eslint --ext .js ./public/js",
     "test": "echo \"Hello\"",
     "start": "node server.js"
   },
