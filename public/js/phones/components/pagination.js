@@ -57,6 +57,11 @@ export default class Pagination extends Component {
     this.on('click', 'next-button', () => {
       this._setPage(this._state.currentPage + 1);
     });
+
+    this.on('change', 'per-page-select', ({ target }) => {
+      const perPage = +target.value;
+      this._setPerPage(perPage);
+    });
   }
 
   _setPage(page) {
@@ -64,18 +69,40 @@ export default class Pagination extends Component {
       ...this._state,
 
       currentPage: Math.min(
-        Math.max(page, 1),
-        this.pagesCount,
+        Math.max(1, page), this.pagesCount,
       ),
     };
 
     this._render();
   }
 
+  _setPerPage(perPage) {
+    this._state = {
+      ...this._state,
+      perPage,
+    };
+
+    this._render();
+  }
+
   _render() {
-    const { currentPage } = this._state;
+    const { currentPage, perPage } = this._state;
 
     this._element.innerHTML = `
+      perPage: ${ perPage }
+
+      <select data-element="per-page-select">
+        ${ [3, 5, 10, 20].map(option => `
+          <option
+            value="${ option }"
+            ${ +option === perPage ? 'selected' : '' }
+          >
+            ${ option }
+          </option>
+        `).join('') }
+        <option></option>
+      </select>
+
       <button data-element="prev-button"> < </button>
       
       ${ this.pages.map(page => `
