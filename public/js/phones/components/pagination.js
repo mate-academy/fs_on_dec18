@@ -1,6 +1,8 @@
-export default class Pagination {
+import Component from '../../component.js';
+
+export default class Pagination extends Component {
   constructor({ element }) {
-    this._element = element;
+    super({ element });
 
     this._props = {
       totalCount: 0,
@@ -12,6 +14,8 @@ export default class Pagination {
     };
 
     this._render();
+
+    this._addEventListeners();
   }
 
   setTotalCount(totalCount) {
@@ -23,8 +27,9 @@ export default class Pagination {
     this._render();
   }
 
-  _getPages(pagesCount) {
+  get pages() {
     const pages = [];
+    const pagesCount = this.pagesCount;
 
     for (let i = 1; i <= pagesCount; i++) {
       pages.push(i);
@@ -33,21 +38,57 @@ export default class Pagination {
     return pages;
   }
 
-  _render() {
+  get pagesCount() {
     const { totalCount } = this._props;
-    const { currentPage, perPage } = this._state;
+    const { perPage } = this._state;
 
-    const pagesCount = Math.ceil(totalCount / perPage);
-    const pages = this._getPages(pagesCount);
+    return  Math.ceil(totalCount / perPage);
+  }
+
+  _addEventListeners() {
+    this.on('click', 'page-button', ({ target }) => {
+      this._setPage(target.dataset.page);
+    });
+
+    this.on('click', 'prev-button', () => {
+      this._setPage(this._state.currentPage - 1);
+    });
+
+    this.on('click', 'next-button', () => {
+      this._setPage(this._state.currentPage + 1);
+    });
+  }
+
+  _setPage(page) {
+    this._state = {
+      ...this._state,
+
+      currentPage: Math.min(
+        Math.max(page, 1),
+        this.pagesCount,
+      ),
+    };
+
+    this._render();
+  }
+
+  _render() {
+    const { currentPage } = this._state;
 
     this._element.innerHTML = `
-      <button> < </button>
+      <button data-element="prev-button"> < </button>
       
-      ${ pages.map(page => `
-        <button>${ page }</button>
+      ${ this.pages.map(page => `
+        <button
+          data-element="page-button"
+          data-page="${ page }"
+          ${ (page === currentPage) ? 'class="pagination__page-button--current"' : '' }
+        >
+          ${ page }
+        </button>
       `).join('')}
       
-      <button> > </button>
+      <button data-element="next-button"> > </button>
     `;
   }
 }
