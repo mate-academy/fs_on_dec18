@@ -2,6 +2,7 @@ import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import Filter from './components/filter.js';
 import ShoppingCart from './components/shopping-cart.js';
+import Pagination from './components/pagination.js';
 import PhoneService from './services/phone-service.js';
 
 export default class PhonesPage {
@@ -14,6 +15,7 @@ export default class PhonesPage {
     this._initViewer();
     this._initShoppingCart();
     this._initFilter();
+    this._initPagination();
 
     this._showPhones();
   }
@@ -84,12 +86,19 @@ export default class PhonesPage {
     });
   }
 
+  _initPagination() {
+    this._topPagination = new Pagination({
+      element: document.querySelector('[data-component="pagination1"]'),
+    });
+  }
+
   async _showPhones() {
     const currentFiltering = this._filter.getCurrentData();
 
     try {
       const phones = await PhoneService.getAll(currentFiltering);
 
+      this._topPagination.setTotalCount(phones.length);
       this._catalog.show(phones);
     } catch (error) {
       alert('Server is not available');
@@ -113,6 +122,7 @@ export default class PhonesPage {
     
         <!--Main content-->
         <div class="col-md-10">
+          <div data-component="pagination1"></div>
           <div data-component="phone-catalog"></div>
         </div>
         
