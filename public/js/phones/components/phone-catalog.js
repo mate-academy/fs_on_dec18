@@ -39,6 +39,7 @@ export default class PhoneCatalog extends Component {
             data-phone-id="${phone.id}"
             class="thumbnail"
           >
+            <span>(#${ phone.age })</span>
             <a
               data-element="details-link"
               href="#!/phones/${ phone.id }"

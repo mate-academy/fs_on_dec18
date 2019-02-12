@@ -101,7 +101,7 @@ export default class PhonesPage {
       <div class="row">
 
         <!--Sidebar-->
-        <div class="col-md-2" data-element="sidebar" ref="(element) => { this._thumb = element }">
+        <div class="col-md-2" data-element="sidebar">
           <section>
             <div data-component="filter"></div>
           </section>
@@ -114,8 +114,9 @@ export default class PhonesPage {
         <!--Main content-->
         <div class="col-md-10">
           <div data-component="phone-catalog"></div>
-          <div data-component="phone-viewer" hidden></div>
         </div>
+        
+        <div data-component="phone-viewer" hidden></div>
       </div>
     `;
   }
