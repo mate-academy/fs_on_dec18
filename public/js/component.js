@@ -2,6 +2,25 @@ export default class Component {
   constructor({ element }) {
     this._element = element;
     this._callbackMap = {};
+    this._props = {};
+    this._state = {};
+  }
+
+  setState(newState) {
+    this._state = {
+      ...this._state,
+      ...newState,
+    };
+  }
+
+  setProps(newProps) {
+    this._props = {
+      ...newProps,
+    };
+
+    if (this._updateView) {
+      this._updateView();
+    }
   }
 
   hide() {

@@ -5,10 +5,7 @@ export default class Pagination extends Component {
     super({ element });
 
     this._props = {
-      totalCount: 0,
-    };
-
-    this._state = {
+      pagesCount: 0,
       currentPage: 1,
       perPage: 5,
     };
@@ -18,18 +15,9 @@ export default class Pagination extends Component {
     this._addEventListeners();
   }
 
-  setTotalCount(totalCount) {
-    this._props = {
-      ...this._props,
-      totalCount,
-    };
-
-    this._render();
-  }
-
   get pages() {
     const pages = [];
-    const pagesCount = this.pagesCount;
+    const { pagesCount } = this._props;
 
     for (let i = 1; i <= pagesCount; i++) {
       pages.push(i);
@@ -38,11 +26,8 @@ export default class Pagination extends Component {
     return pages;
   }
 
-  get pagesCount() {
-    const { totalCount } = this._props;
-    const { perPage } = this._state;
-
-    return  Math.ceil(totalCount / perPage);
+  _updateView() {
+    this._render();
   }
 
   _addEventListeners() {
@@ -65,28 +50,20 @@ export default class Pagination extends Component {
   }
 
   _setPage(page) {
-    this._state = {
-      ...this._state,
+    const { pagesCount } = this._props;
+    const correctPage = Math.min(
+      Math.max(1, page), pagesCount,
+    );
 
-      currentPage: Math.min(
-        Math.max(1, page), this.pagesCount,
-      ),
-    };
-
-    this._render();
+    this.emit('page-changed', correctPage);
   }
 
   _setPerPage(perPage) {
-    this._state = {
-      ...this._state,
-      perPage,
-    };
-
-    this._render();
+    this.emit('per-page-changed', perPage);
   }
 
   _render() {
-    const { currentPage, perPage } = this._state;
+    const { currentPage, perPage } = this._props;
 
     this._element.innerHTML = `
       perPage: ${ perPage }

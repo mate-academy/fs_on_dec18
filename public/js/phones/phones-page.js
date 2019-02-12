@@ -1,3 +1,7 @@
+/* Global Math:true */
+
+import Component from '../component.js';
+
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import Filter from './components/filter.js';
@@ -5,9 +9,15 @@ import ShoppingCart from './components/shopping-cart.js';
 import Pagination from './components/pagination.js';
 import PhoneService from './services/phone-service.js';
 
-export default class PhonesPage {
+export default class PhonesPage extends Component {
   constructor({ element }) {
-    this._element = element;
+    super({ element });
+
+    this._state = {
+      currentPage: 1,
+      phones: [],
+      perPage: 5,
+    };
 
     this._render();
 
@@ -18,6 +28,33 @@ export default class PhonesPage {
     this._initPagination();
 
     this._showPhones();
+  }
+
+  get pagesCount() {
+    const { perPage, phones } = this._state;
+
+    return Math.ceil(phones.length / perPage);
+  }
+
+  _setPage(page) {
+    const newPage = Math.min(
+      Math.max(1, page), this.pagesCount,
+    );
+
+    this.setState({
+      currentPage: newPage
+    });
+
+    this._render();
+  }
+
+  _setPerPage(perPage) {
+    this._state = {
+      ...this._state,
+      perPage,
+    };
+
+    this._render();
   }
 
   _initCatalog() {
@@ -90,6 +127,26 @@ export default class PhonesPage {
     this._topPagination = new Pagination({
       element: document.querySelector('[data-component="pagination1"]'),
     });
+
+    this._topPagination.subscribe('page-changed', (currentPage) => {
+      this.setState({
+        currentPage,
+      });
+
+      this._updateView();
+    });
+
+    this._topPagination.subscribe('per-page-changed', (perPage) => {
+      this.setState({
+        perPage,
+      });
+
+      this._updateView();
+    });
+
+    this._bottomPagination = new Pagination({
+      element: document.querySelector('[data-component="pagination2"]'),
+    });
   }
 
   async _showPhones() {
@@ -98,11 +155,31 @@ export default class PhonesPage {
     try {
       const phones = await PhoneService.getAll(currentFiltering);
 
-      this._topPagination.setTotalCount(phones.length);
-      this._catalog.show(phones);
+      this.setState({
+        phones,
+      });
+
+      this._updateView();
     } catch (error) {
       alert('Server is not available');
     }
+  }
+
+  _updateView() {
+    const { phones, currentPage, perPage } = this._state;
+    const paginationProps = {
+      totalCount: phones.length,
+      currentPage,
+      perPage,
+    };
+
+    const endIndex = currentPage * perPage + 1;
+    const startIndex = endIndex - perPage;
+    const visiblePhones = phones.slice(startIndex, endIndex);
+
+    this._topPagination.setProps(paginationProps);
+    this._bottomPagination.setProps(paginationProps);
+    this._catalog.show(visiblePhones);
   }
 
   _render() {
@@ -123,6 +200,7 @@ export default class PhonesPage {
         <!--Main content-->
         <div class="col-md-10">
           <div data-component="pagination1"></div>
+          <div data-component="pagination2"></div>
           <div data-component="phone-catalog"></div>
         </div>
         
