@@ -1,14 +1,10 @@
 import Component from '../../component.js';
 
 export default class Pagination extends Component {
-  constructor({ element }) {
+  constructor({ element, props }) {
     super({ element });
 
-    this._props = {
-      pagesCount: 0,
-      currentPage: 1,
-      perPage: 5,
-    };
+    this._props = { ...props };
 
     this._render();
 

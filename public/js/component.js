@@ -11,6 +11,10 @@ export default class Component {
       ...this._state,
       ...newState,
     };
+
+    if (this._updateView) {
+      this._updateView();
+    }
   }
 
   setProps(newProps) {

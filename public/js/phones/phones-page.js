@@ -124,57 +124,56 @@ export default class PhonesPage extends Component {
   }
 
   _initPagination() {
+    const { perPage, currentPage } = this._state;
+
     this._topPagination = new Pagination({
       element: document.querySelector('[data-component="pagination1"]'),
+      props: {
+        perPage,
+        currentPage,
+        pagesCount: this.pagesCount,
+      },
     });
 
     this._topPagination.subscribe('page-changed', (currentPage) => {
-      this.setState({
-        currentPage,
-      });
-
-      this._updateView();
+      this.setState({ currentPage });
     });
 
     this._topPagination.subscribe('per-page-changed', (perPage) => {
-      this.setState({
-        perPage,
-      });
-
-      this._updateView();
+      this.setState({ perPage });
     });
 
     this._bottomPagination = new Pagination({
       element: document.querySelector('[data-component="pagination2"]'),
+      props: {
+        perPage,
+        currentPage,
+        pagesCount: this.pagesCount,
+      },
     });
   }
 
   async _showPhones() {
     const currentFiltering = this._filter.getCurrentData();
 
-    try {
-      const phones = await PhoneService.getAll(currentFiltering);
+    const phones = await PhoneService.getAll(currentFiltering);
 
-      this.setState({
-        phones,
-      });
-
-      this._updateView();
-    } catch (error) {
-      alert('Server is not available');
-    }
+    this.setState({
+      phones,
+      currentPage: 1,
+    });
   }
 
   _updateView() {
     const { phones, currentPage, perPage } = this._state;
     const paginationProps = {
-      totalCount: phones.length,
+      pagesCount: this.pagesCount,
       currentPage,
       perPage,
     };
 
-    const endIndex = currentPage * perPage + 1;
-    const startIndex = endIndex - perPage;
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = startIndex + perPage;
     const visiblePhones = phones.slice(startIndex, endIndex);
 
     this._topPagination.setProps(paginationProps);
