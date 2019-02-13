@@ -7,44 +7,52 @@ const { debounce } = _;
 const QUERY_CHANGE_DELAY = 300;
 
 export default class Filter extends Component {
-  constructor({ element }) {
+  constructor({ element, props }) {
     super({ element });
+
+    this._props = { ...props };
 
     this._render();
 
-    this._queryField = this._element.querySelector('[data-element="query-field"]');
-    this._orderField = this._element.querySelector('[data-element="order-field"]');
 
-    this.on('change', 'order-field', () => {
-      this.emit('order-changed');
+    this.on('change', 'order-field', (event) => {
+      this.emit('order-changed', event.target.value);
     });
 
-    const emitQueryChangedWithDebounce = debounce(() => {
-      this.emit('query-changed');
-    }, QUERY_CHANGE_DELAY);
-
-    this.on('input', 'query-field', emitQueryChangedWithDebounce);
+    this.on('input', 'query-field', debounce((event) => {
+      this.emit('query-changed', event.target.value);
+    }, QUERY_CHANGE_DELAY));
   }
 
-  getCurrentData() {
-    return {
-      query: this._queryField.value,
-      sortBy: this._orderField.value,
-    };
+  _updateView() {
+    this._render();
   }
 
   _render() {
+    const { query, sortBy } = this._props;
+
     this._element.innerHTML = `
       <p>
         Search:
-        <input data-element="query-field">
+        <input data-element="query-field" value="${ query }">
       </p>
 
       <p>
         Sort by:
         <select data-element="order-field">
-          <option value="name">Alphabetical</option>
-          <option value="age">Newest</option>
+          <option
+            ${ sortBy === 'name' ? 'selected' : '' }
+            value="name"
+          >
+            Alphabetical
+          </option>
+          
+          <option
+            ${ sortBy === 'age' ? 'selected' : '' }
+            value="age"
+          >
+            Newest
+          </option>
         </select>
       </p>
     `;

@@ -110,53 +110,54 @@ export default class PhonesPage extends Component {
   _initFilter() {
     this._filter = new Filter({
       element: document.querySelector('[data-component="filter"]'),
+      props: {
+        query: this._state.query,
+        sortBy: this._state.sortBy,
+      },
     });
 
-    this._filter.subscribe('order-changed', () => {
-      this._showPhones();
+    this._filter.subscribe('order-changed', (sortBy) => {
+      this._setState({ sortBy });
     });
 
-    this._filter.subscribe('query-changed', () => {
-      this._showPhones();
+    this._filter.subscribe('query-changed', (query) => {
+      this._setState({ query });
     });
   }
 
   _initPagination() {
-    const { perPage, currentPage } = this._state;
-
     this._topPagination = new Pagination({
       element: document.querySelector('[data-component="pagination1"]'),
       props: {
-        perPage,
-        currentPage,
+        perPage: this._state.perPage,
+        currentPage: this._state.currentPage,
         pagesCount: this.pagesCount,
       },
     });
 
     this._topPagination.subscribe('page-changed', (currentPage) => {
-      this.setState({ currentPage });
+      this._setState({ currentPage });
     });
 
     this._topPagination.subscribe('per-page-changed', (perPage) => {
-      this.setState({ perPage });
+      this._setState({ perPage });
     });
 
     this._bottomPagination = new Pagination({
       element: document.querySelector('[data-component="pagination2"]'),
       props: {
-        perPage,
-        currentPage,
+        perPage: this._state.perPage,
+        currentPage: this._state.currentPage,
         pagesCount: this.pagesCount,
       },
     });
   }
 
   async _showPhones() {
-    const currentFiltering = this._filter.getCurrentData();
+    const { query, sortBy } = this._state;
+    const phones = await PhoneService.getAll({ query, sortBy });
 
-    const phones = await PhoneService.getAll(currentFiltering);
-
-    this.setState({
+    this._setState({
       phones,
       currentPage: 1,
     });
@@ -168,6 +169,8 @@ export default class PhonesPage extends Component {
       currentPage,
       perPage,
       currentPhone,
+      query,
+      sortBy,
     } = this._state;
 
     const paginationProps = {
@@ -185,12 +188,13 @@ export default class PhonesPage extends Component {
       this._catalog.hide();
     } else {
       this._viewer.hide();
-      this._catalog.show();
+      this._catalog.show(visiblePhones);
     }
 
     this._topPagination.setProps(paginationProps);
     this._bottomPagination.setProps(paginationProps);
-    this._catalog.show(visiblePhones);
+
+    this._filter.setProps({ query, sortBy });
   }
 
   _render() {
