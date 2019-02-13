@@ -41,27 +41,6 @@ export default class PhonesPage extends Component {
     return Math.ceil(phones.length / perPage);
   }
 
-  _setPage(page) {
-    const newPage = Math.min(
-      Math.max(1, page), this.pagesCount,
-    );
-
-    this.setState({
-      currentPage: newPage
-    });
-
-    this._render();
-  }
-
-  _setPerPage(perPage) {
-    this._state = {
-      ...this._state,
-      perPage,
-    };
-
-    this._render();
-  }
-
   _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: document.querySelector('[data-component="phone-catalog"]'),
@@ -91,9 +70,7 @@ export default class PhonesPage extends Component {
     });
 
     this._viewer.subscribe('back', () => {
-      this._setState({
-        currentPhone: null,
-      });
+      this._showPhones();
     });
 
     this._viewer.subscribe('add', (phoneId) => {
@@ -160,6 +137,7 @@ export default class PhonesPage extends Component {
     this._setState({
       phones,
       currentPage: 1,
+      currentPhone: null,
     });
   }
 
