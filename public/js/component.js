@@ -6,27 +6,6 @@ export default class Component {
     this._state = {};
   }
 
-  setState(newState) {
-    this._state = {
-      ...this._state,
-      ...newState,
-    };
-
-    if (this._updateView) {
-      this._updateView();
-    }
-  }
-
-  setProps(newProps) {
-    this._props = {
-      ...newProps,
-    };
-
-    if (this._updateView) {
-      this._updateView();
-    }
-  }
-
   hide() {
     this._element.hidden = true;
   }
@@ -65,5 +44,27 @@ export default class Component {
     eventCallbacks.forEach((callback) => {
       callback(data);
     });
+  }
+
+  setProps(newProps) {
+    this._props = {
+      ...this._props,
+      ...newProps,
+    };
+
+    this._updateView(this._props, this._state);
+  }
+
+  _setState(newState) {
+    this._state = {
+      ...this._state,
+      ...newState,
+    };
+
+    this._updateView(this._props, this._state);
+  }
+
+  _updateView() {
+    console.warn('Please implement _updateView');
   }
 }

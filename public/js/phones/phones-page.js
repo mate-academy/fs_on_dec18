@@ -14,9 +14,14 @@ export default class PhonesPage extends Component {
     super({ element });
 
     this._state = {
-      currentPage: 1,
+      currentPhone: null,
       phones: [],
+
+      currentPage: 1,
       perPage: 5,
+
+      query: '',
+      sortBy: 'age',
     };
 
     this._render();
@@ -62,15 +67,6 @@ export default class PhonesPage extends Component {
       element: document.querySelector('[data-component="phone-catalog"]'),
     });
 
-    this._catalog.subscribe('phone-selected', (phoneId) => {
-      const detailsPromise = PhoneService.getById(phoneId);
-
-      detailsPromise.then((phoneDetails) => {
-        this._catalog.hide();
-        this._viewer.show(phoneDetails);
-      });
-    });
-
     this._catalog.subscribe('phone-selected', async (phoneId) => {
       const phoneDetails = await PhoneService.getById(phoneId)
         .catch(() => null);
@@ -79,8 +75,9 @@ export default class PhonesPage extends Component {
         return;
       }
 
-      this._catalog.hide();
-      this._viewer.show(phoneDetails);
+      this._setState({
+        currentPhone: phoneDetails,
+      });
     });
 
     this._catalog.subscribe('phone-added', (phoneId) => {
@@ -94,8 +91,9 @@ export default class PhonesPage extends Component {
     });
 
     this._viewer.subscribe('back', () => {
-      this._viewer.hide();
-      this._showPhones();
+      this._setState({
+        currentPhone: null,
+      });
     });
 
     this._viewer.subscribe('add', (phoneId) => {
@@ -165,7 +163,13 @@ export default class PhonesPage extends Component {
   }
 
   _updateView() {
-    const { phones, currentPage, perPage } = this._state;
+    const {
+      phones,
+      currentPage,
+      perPage,
+      currentPhone,
+    } = this._state;
+
     const paginationProps = {
       pagesCount: this.pagesCount,
       currentPage,
@@ -175,6 +179,14 @@ export default class PhonesPage extends Component {
     const startIndex = (currentPage - 1) * perPage;
     const endIndex = startIndex + perPage;
     const visiblePhones = phones.slice(startIndex, endIndex);
+
+    if (currentPhone) {
+      this._viewer.show(currentPhone);
+      this._catalog.hide();
+    } else {
+      this._viewer.hide();
+      this._catalog.show();
+    }
 
     this._topPagination.setProps(paginationProps);
     this._bottomPagination.setProps(paginationProps);
