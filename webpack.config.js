@@ -1,16 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'none',
   entry: {
     main: './frontend/js/main.js',
     test: './frontend/js/test.js',
+    asd: './frontend/js/qweqwe.scss',
   },
 
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: '[name][hash].js',
+    publicPath: '',
   },
 
   devtool: 'source-map',
@@ -19,6 +22,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './frontend/index.html',
       chunks: ['main'],
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name][hash].css',
     }),
   ],
 
@@ -41,7 +47,11 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
       },
     ],
   },
