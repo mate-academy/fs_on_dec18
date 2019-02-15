@@ -1,15 +1,26 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'none',
-  entry: './frontend/js/main.js',
+  entry: {
+    main: './frontend/js/main.js',
+    test: './frontend/js/test.js',
+  },
 
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: 'main.js',
+    filename: '[name][hash].js',
   },
 
   devtool: 'source-map',
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './frontend/index.html',
+      chunks: ['main'],
+    }),
+  ],
 
   module: {
     rules: [
@@ -27,6 +38,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },

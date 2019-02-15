@@ -1,5 +1,5 @@
 import PhonesPage from './phones/phones-page.js';
-import './main.css';
+import './main.scss';
 
 // eslint-disable-next-line no-unused-vars
 const currentPage = new PhonesPage({
