@@ -7,7 +7,6 @@ module.exports = {
   entry: {
     main: './frontend/js/main.js',
     test: './frontend/js/test.js',
-    asd: './frontend/js/qweqwe.scss',
   },
 
   output: {
