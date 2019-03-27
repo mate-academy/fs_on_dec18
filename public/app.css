@@ -5,6 +5,10 @@ body {
   background-color: lightgoldenrodyellow;
 }
 
+.pagination__page-button--current {
+  background-color: yellowgreen;
+}
+
 .phone-images {
   background-color: white;
   width: 450px;
