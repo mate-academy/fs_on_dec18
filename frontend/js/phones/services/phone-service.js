@@ -1,10 +1,10 @@
-const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
+const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static/api';
 // const BASE_URL = 'http://localhost:8080';
 
 const PhoneService = {
 
   async getAll({ query = '', sortBy = '' } = {}) {
-    const phonesFromServer = await this._sendRequest('/phones/phones');
+    const phonesFromServer = await this._sendRequest('/phones');
     const regexp = new RegExp(query, 'i');
 
     return phonesFromServer
